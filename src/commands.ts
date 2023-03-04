@@ -9,11 +9,24 @@ function convertToTodoItem() {
     }
 }
 
+function toggleTodoItem() {
+    const curLine = editor.getCurrentLine();
+    if (curLine) {
+        editor.toggleTodoItem(curLine);
+    }
+}
+
 export function registerCommands(context: vscode.ExtensionContext) {
     let disposable;
     disposable = vscode.commands.registerCommand(
         'todo-md.convertToTodoItem',
         convertToTodoItem
+    );
+    context.subscriptions.push(disposable);
+
+    disposable = vscode.commands.registerCommand(
+        'todo-md.toggleTodoItem',
+        toggleTodoItem
     );
     context.subscriptions.push(disposable);
 }

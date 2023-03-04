@@ -26,6 +26,11 @@
         "command": "todo-md.convertToTodoItem",
         "title": "Convert line to TODO item",
         "category": "todo.md"
+      },
+      {
+        "command": "todo-md.toggleTodoItem",
+        "title": "Mark TODO item as done/not done",
+        "category": "todo.md"
       }
     ]
   },

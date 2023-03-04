@@ -1,10 +1,10 @@
 export const TODO_ITEM_BULLET = '- [ ]';
+export const TODO_ITEM_BULLET_DONE = '- [X]';
 
-export const TODO_ITEM_BULLET_DONE_1 = '- [x]';
-export const TODO_ITEM_BULLET_DONE_2 = '- [X]';
-export const possibleTodoItemBulletDone = [
-    TODO_ITEM_BULLET_DONE_1,
-    TODO_ITEM_BULLET_DONE_2,
-];
+export const todoItemRegex = new RegExp('^\\s*-\\s\\[(\\s|x|X)?\\]');
 
-export const todoItemBulletRegex = new RegExp('^\\s*-\\s\\[(\\s|x|X)?\\]');
+export const todoItemBulletDoneRegex = new RegExp('-\\s\\[(x|X)\\]');
+export const todoItemDoneRegex = new RegExp(`^\\s*${todoItemBulletDoneRegex.source}`);
+
+export const todoItemBulletNotDoneRegex = new RegExp('-\\s\\[\\s\\]');
+export const todoItemNotDoneRegex = new RegExp(`^\\s*${todoItemBulletNotDoneRegex.source}`);
