@@ -33,6 +33,18 @@
         "category": "todo.md"
       }
     ],
+    "keybindings": [
+      {
+        "command": "todo-md.convertToTodoItem",
+        "key": "ctrl+alt+v",
+        "when": "editorTextFocus && editorLangId == markdown"
+      },
+      {
+        "command": "todo-md.toggleTodoItem",
+        "key": "ctrl+alt+x",
+        "when": "editorTextFocus && editorLangId == markdown"
+      }
+    ],
     "configuration": {
       "title": "Settings",
       "properties": {
