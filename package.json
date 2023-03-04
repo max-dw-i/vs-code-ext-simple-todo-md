@@ -14,6 +14,13 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "grammars": [
+      {
+        "language": "markdown",
+        "scopeName": "source.markdown",
+        "path": "./syntaxes/todo-md.tmLanguage.json"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

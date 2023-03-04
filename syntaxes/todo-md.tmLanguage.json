@@ -1,0 +1,74 @@
+{
+    "scopeName": "source.markdown",
+    "patterns": [
+        {
+            "include": "#todo-item"
+        }
+    ],
+    "repository": {
+        "todo-item": {
+            "name": "meta.todo-item",
+            "patterns": [
+                {
+                    "include": "#todo-item-mark"
+                },
+                {
+                    "include": "#todo-item-priority"
+                },
+                {
+                    "include": "#todo-item-enddate"
+                },
+                {
+                    "include": "#todo-item-startdate"
+                },
+                {
+                    "include": "#todo-item-project"
+                },
+                {
+                    "include": "#todo-item-context"
+                },
+                {
+                    "include": "#todo-item-duedate"
+                },
+                {
+                    "include": "#todo-item"
+                }
+            ]
+        },
+
+        "todo-item-mark": {
+            "name": "keyword.other.done.todo-md",
+            "match": "^\\s*-\\s\\[(\\s|X|x)?\\]"
+        },
+
+        "todo-item-priority": {
+            "name": "support.constant.priority.todo-md",
+            "match": "\\([A-Z]\\)"
+        },
+
+        "todo-item-enddate": {
+            "name": "constant.language.date.end.todo-md",
+            "match": "e:\\d{2}-\\d{2}-\\d{4}"
+        },
+
+        "todo-item-startdate": {
+            "name": "constant.language.date.start.todo-md",
+            "match": "s:\\d{2}-\\d{2}-\\d{4}"
+        },
+
+        "todo-item-project": {
+            "name": "entity.name.section.project.todo-md",
+            "match": "\\+\\S+"
+        },
+
+        "todo-item-context": {
+            "name": "entity.name.section.context.todo-md",
+            "match": "\\@\\S+"
+        },
+
+        "todo-item-duedate": {
+            "name": "variable.parameter.date.due.todo-md",
+            "match": "d:\\d{2}-\\d{2}-\\d{4}"
+        }
+    }
+}
