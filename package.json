@@ -20,6 +20,13 @@
         "scopeName": "source.markdown",
         "path": "./syntaxes/todo-md.tmLanguage.json"
       }
+    ],
+    "commands": [
+      {
+        "command": "todo-md.convertToTodoItem",
+        "title": "Convert line to TODO item",
+        "category": "todo.md"
+      }
     ]
   },
   "scripts": {
