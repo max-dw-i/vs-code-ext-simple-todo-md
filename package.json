@@ -32,7 +32,17 @@
         "title": "Mark TODO item as done/not done",
         "category": "todo.md"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Settings",
+      "properties": {
+        "todo-md.decorateTodoItems": {
+          "type": "boolean",
+          "default": true,
+          "description": "Renders additional decorations in the editor (for example, sets the 'line-through' style for 'Done' items)"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

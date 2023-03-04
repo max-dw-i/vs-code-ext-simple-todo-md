@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
+import { decorate } from './decorations';
 import * as editor from './editor';
+import * as settings from './settings';
 
 
 const TODO_ITEM_BULLET = '- [ ]';
@@ -15,13 +17,20 @@ const todoItemNotDoneRegex = new RegExp(`^\\s*${todoItemBulletNotDoneRegex.sourc
 
 
 export function isTodoItem(line: vscode.TextLine) {
-    const lineText = line.text;
-    return todoItemRegex.test(lineText);
+    return todoItemRegex.test(line.text);
+}
+
+export function isDoneTodoItem(line: vscode.TextLine) {
+    return todoItemDoneRegex.test(line.text);
+}
+
+export function isNotDoneTodoItem(line: vscode.TextLine) {
+    return todoItemNotDoneRegex.test(line.text);
 }
 
 export function insertTodoItemBullet(line: vscode.TextLine) {
-    const lineText = line.text;
-    if (!todoItemRegex.test(lineText)) {
+    if (!isTodoItem(line)) {
+        const lineText = line.text;
         const firstNonWhChInd = line.firstNonWhitespaceCharacterIndex;
         const whitespaces = lineText.slice(0, firstNonWhChInd);
         const meaningfulText = lineText.slice(firstNonWhChInd, lineText.length);
@@ -31,15 +40,20 @@ export function insertTodoItemBullet(line: vscode.TextLine) {
 
 export function toggleTodoItem(line: vscode.TextLine) {
     const lineText = line.text;
-    if (todoItemDoneRegex.test(lineText)) {
-        editor.replaceLine(line, lineText.replace(
+    let promise;
+    if (isDoneTodoItem(line)) {
+        promise = editor.replaceLine(line, lineText.replace(
             todoItemBulletDoneRegex,
             TODO_ITEM_BULLET
         ));
-    } else if (todoItemNotDoneRegex.test(lineText)) {
-        editor.replaceLine(line, lineText.replace(
+    } else if (isNotDoneTodoItem(line)) {
+        promise = editor.replaceLine(line, lineText.replace(
             todoItemBulletNotDoneRegex,
             TODO_ITEM_BULLET_DONE
         ));
+    }
+
+    if (promise && settings.isDecorateTodoItems()) {
+        promise.then(() => { decorate(); });
     }
 }

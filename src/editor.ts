@@ -11,11 +11,11 @@ export function getCurrentLine() {
 }
 
 export function replaceLine(line: vscode.TextLine, replaceWith: string) {
-    const { editor, doc } = utils.getCurrentEditorAndDocument();
-    if (editor && doc) {
+    const { editor } = utils.getCurrentEditorAndDocument();
+    if (editor) {
         const lineRange = line.range;
         const lineSelection = new vscode.Selection(lineRange.start, lineRange.end);
-        editor.edit(editBuilder => {
+        return editor.edit(editBuilder => {
             editBuilder.replace(lineSelection, replaceWith);
         });
     }
