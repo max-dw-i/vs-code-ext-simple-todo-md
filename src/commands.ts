@@ -1,18 +1,19 @@
 import * as vscode from 'vscode';
 import * as editor from './editor';
+import * as item from './item';
 
 
 function convertToTodoItem() {
     const curLine = editor.getCurrentLine();
     if (curLine) {
-        editor.insertTodoItemBullet(curLine);
+        item.insertTodoItemBullet(curLine);
     }
 }
 
 function toggleTodoItem() {
     const curLine = editor.getCurrentLine();
     if (curLine) {
-        editor.toggleTodoItem(curLine);
+        item.toggleTodoItem(curLine);
     }
 }
 
