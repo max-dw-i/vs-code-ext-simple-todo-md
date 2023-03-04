@@ -1,43 +1,33 @@
 import * as vscode from 'vscode';
+import * as consts from './consts';
 import * as utils from './utils';
 
 
-const TODO_ITEM_BULLET = '- [ ]';
-const todoItemBulletRegex = new RegExp('^\\s*-\\s\\[(\\s|x|X)?\\]');
-
-
-function replaceCurrentLine(str: string) {
+export function getCurrentLine() {
     const { editor, doc } = utils.getCurrentEditorAndDocument();
     if (editor && doc) {
         const curPos = editor.selection.active;
-        const curLineRange = doc.lineAt(curPos.line).range;
-        const curLineSelection = new vscode.Selection(curLineRange.start, curLineRange.end);
+        return doc.lineAt(curPos.line);
+    }
+}
+
+export function replaceLine(line: vscode.TextLine, replaceWith: string) {
+    const { editor, doc } = utils.getCurrentEditorAndDocument();
+    if (editor && doc) {
+        const lineRange = line.range;
+        const lineSelection = new vscode.Selection(lineRange.start, lineRange.end);
         editor.edit(editBuilder => {
-            editBuilder.replace(curLineSelection, str);
+            editBuilder.replace(lineSelection, replaceWith);
         });
     }
 }
 
-function convertToTodoItem() {
-    const { editor, doc } = utils.getCurrentEditorAndDocument();
-    if (editor && doc) {
-        const curPos = editor.selection.active;
-        const curLine = doc.lineAt(curPos.line);
-        const curLineText = curLine.text;
-        if (!todoItemBulletRegex.test(curLineText)) {
-            const essentialInd = curLine.firstNonWhitespaceCharacterIndex;
-            const whitespaces = curLineText.slice(0, essentialInd);
-            const meaningfulText = curLineText.slice(essentialInd, curLineText.length);
-            replaceCurrentLine(`${whitespaces}${TODO_ITEM_BULLET} ${meaningfulText}`);
-        }
+export function insertTodoItemBullet(line: vscode.TextLine) {
+    const lineText = line.text;
+    if (!consts.todoItemBulletRegex.test(lineText)) {
+        const firstNonWhChInd = line.firstNonWhitespaceCharacterIndex;
+        const whitespaces = lineText.slice(0, firstNonWhChInd);
+        const meaningfulText = lineText.slice(firstNonWhChInd, lineText.length);
+        replaceLine(line, `${whitespaces}${consts.TODO_ITEM_BULLET} ${meaningfulText}`);
     }
-}
-
-export function registerActions(context: vscode.ExtensionContext) {
-    let disposable;
-    disposable = vscode.commands.registerCommand(
-        'todo-md.convertToTodoItem',
-        convertToTodoItem
-    );
-    context.subscriptions.push(disposable);
 }

@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
-import * as editor from './editor';
+import * as commands from './commands';
 
 
 export function activate(context: vscode.ExtensionContext) {
-	editor.registerActions(context);
+	commands.registerCommands(context);
 }
 
 export function deactivate() {
