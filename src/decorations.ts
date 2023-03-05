@@ -14,7 +14,8 @@ export function decorate() {
         const decorationRanges = [];
         for (let i = 0; i < doc.lineCount; i++) {
             const line = doc.lineAt(i);
-            if (item.isDoneTodoItem(line)) {
+            const todoItem = item.strToTodoItem(line.text);
+            if (todoItem && todoItem.bullet === true) {
                 const startPos = new vscode.Position(
                     line.lineNumber,
                     line.firstNonWhitespaceCharacterIndex

@@ -6,7 +6,7 @@ import * as item from './item';
 function convertToTodoItem() {
     const curLine = editor.getCurrentLine();
     if (curLine) {
-        item.insertTodoItemBullet(curLine);
+        item.convertToTodoItem(curLine);
     }
 }
 
