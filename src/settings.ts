@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TodoItemPriority } from './types';
+import { TodoItemPriorityT } from './types';
 
 
 export function isDecorateTodoItems() {
@@ -9,5 +9,5 @@ export function isDecorateTodoItems() {
 
 export function defaultPriority() {
     const configuration = vscode.workspace.getConfiguration();
-    return configuration.get('todo-md.defaultPriority') as TodoItemPriority | "off";
+    return configuration.get('todo-md.defaultPriority') as TodoItemPriorityT | "off";
 }

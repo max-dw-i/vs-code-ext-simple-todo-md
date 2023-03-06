@@ -1,8 +1,5 @@
-import * as vscode from 'vscode';
-import { decorate } from './decorations';
-import * as editor from './editor';
 import * as settings from './settings';
-import { TodoItemPriority, TodoItem } from './types';
+import { TodoItemPriorityT, TodoItemI } from './types';
 
 
 const TODO_ITEM_BULLET = '[ ]';
@@ -26,99 +23,122 @@ const todoItemRe = new RegExp(
 );
 
 
-export function strToTodoItem(str: string) {
-    const reApplyResult = str.match(todoItemRe);
-    const parsedGroups = reApplyResult?.groups;
-    if (!parsedGroups) {
-        return null;
+export class TodoItem implements TodoItemI {
+    prefix: string | null;
+    bullet: boolean | null;
+    priority: TodoItemPriorityT | null;
+    endDate: string | null;
+    startDate: string | null;
+    description: string | null;
+    projects: string[];
+    contexts: string[];
+    dueDate: string | null;
+
+    private line: string;
+    private isParsed: boolean;
+
+    constructor(line: string) {
+        this.prefix = null;
+        this.bullet = null;
+        this.priority = null;
+        this.endDate = null;
+        this.startDate = null;
+        this.description = null;
+        this.projects = [];
+        this.contexts = [];
+        this.dueDate = null;
+
+        this.line = line;
+        this.isParsed = false;
+
+        this.parse(line);
     }
 
-    const item: TodoItem = {
-        prefix: parsedGroups.prefix,
-        bullet: null,
-        priority: parsedGroups.priority?.trimEnd()?.slice(1, -1) as TodoItemPriority,
-        endDate: parsedGroups.endDate?.trimEnd()?.slice(2),
-        startDate: parsedGroups.startDate?.trimEnd()?.slice(2),
-        description: parsedGroups.description?.trimEnd(),
-        projects: [],
-        contexts: [],
-        dueDate: null,
-    };
-
-    const bullet = parsedGroups.bullet?.trimEnd();
-    if (bullet) {
-        const doneRe = new RegExp(`(${TODO_ITEM_BULLET_DONE_1}|${TODO_ITEM_BULLET_DONE_2})`);
-        if (doneRe.test(bullet)) {
-            item.bullet = true;
-        }
-        const notDoneRe = new RegExp(`${TODO_ITEM_BULLET}`);
-        if (notDoneRe.test(bullet)) {
-            item.bullet = false;
-        }
-    }
-
-    const splittedDescription = item.description?.split(' ') ?? [];
-    for (const word of splittedDescription) {
-        if (word.startsWith('+')) {
-            item.projects.push(word.slice(1));
-        }
-        if (word.startsWith('@')) {
-            item.contexts.push(word.slice(1));
-        }
-        if (word.startsWith('d:')) {
-            item.dueDate = word.slice(2);
+    private parse(line: string) {
+        const reApplyResult = line.match(todoItemRe);
+        const parsedGroups = reApplyResult?.groups;
+        if (parsedGroups) {
+            this.isParsed = true;
+            this.populateProperties(parsedGroups);
         }
     }
 
-    return item;
-}
+    private populateProperties(groups: { [key: string]: string; }) {
+        this.prefix = groups.prefix;
+        this.priority = groups.priority?.trimEnd()?.slice(1, -1) as TodoItemPriorityT;
+        this.endDate = groups.end?.trimEnd()?.slice(2);
+        this.startDate = groups.start?.trimEnd()?.slice(2);
+        this.description = groups.description?.trimEnd();
 
-function todoItemToStr(item: TodoItem) {
-    const prefix = item.prefix ?? '';
-
-    let bullet;
-    if (item.bullet === null) {
-        bullet = '';
-    } else if (item.bullet) {
-        bullet = `${TODO_ITEM_BULLET_DONE_1} `;
-    } else {
-        bullet = `${TODO_ITEM_BULLET} `;
-    }
-
-    const priority = !item.priority ? '' : `(${item.priority}) `;
-    const endDate = !item.endDate ? '' : `e:${item.endDate} `;
-    const startDate = !item.startDate ? '' : `s:${item.startDate} `;
-
-    return `${prefix}${bullet}${priority}${endDate}${startDate}${item.description}`;
-}
-
-export function convertToTodoItem(line: vscode.TextLine) {
-    const item = strToTodoItem(line.text);
-    if (item && item.bullet === null) {
-        item.bullet = false;
-
-        const defaultPriority = settings.defaultPriority();
-        if (defaultPriority !== 'off') {
-            item.priority = defaultPriority;
+        const bullet = groups.bullet?.trimEnd();
+        if (bullet) {
+            const doneRe = new RegExp(`(${TODO_ITEM_BULLET_DONE_1}|${TODO_ITEM_BULLET_DONE_2})`);
+            if (doneRe.test(bullet)) {
+                this.bullet = true;
+            }
+            const notDoneRe = new RegExp(`${TODO_ITEM_BULLET}`);
+            if (notDoneRe.test(bullet)) {
+                this.bullet = false;
+            }
         }
 
-        editor.replaceLine(line, todoItemToStr(item));
+        const splittedDescription = this.description?.split(' ') ?? [];
+        for (const word of splittedDescription) {
+            if (word.startsWith('+')) {
+                this.projects.push(word.slice(1));
+            }
+            if (word.startsWith('@')) {
+                this.contexts.push(word.slice(1));
+            }
+            if (word.startsWith('d:')) {
+                this.dueDate = word.slice(2);
+            }
+        }
     }
-}
 
-export function toggleTodoItem(line: vscode.TextLine) {
-    const lineText = line.text;
-    const item = strToTodoItem(lineText);
-    if (item) {
-        if (item.bullet === true || item.bullet === null) {
-            item.bullet = false;
-        } else if (item.bullet === false) {
-            item.bullet = true;
+    public toString() {
+        if (!this.isParsed) {
+            return this.line;
         }
 
-        const promise = editor.replaceLine(line, todoItemToStr(item));
-        if (promise && settings.isDecorateTodoItems()) {
-            promise.then(() => { decorate(); });
+        const prefix = this.prefix ?? '';
+
+        let bullet;
+        if (this.bullet === null) {
+            bullet = '';
+        } else if (this.bullet) {
+            bullet = `${TODO_ITEM_BULLET_DONE_1} `;
+        } else {
+            bullet = `${TODO_ITEM_BULLET} `;
+        }
+
+        const priority = !this.priority ? '' : `(${this.priority}) `;
+        const endDate = !this.endDate ? '' : `e:${this.endDate} `;
+        const startDate = !this.startDate ? '' : `s:${this.startDate} `;
+
+        return `${prefix}${bullet}${priority}${endDate}${startDate}${this.description}`;
+    }
+
+    public convert() {
+        if (this.isParsed && this.bullet === null) {
+            this.bullet = false;
+
+            const defaultPriority = settings.defaultPriority();
+            if (defaultPriority !== 'off') {
+                this.priority = defaultPriority;
+            }
+        }
+    }
+
+    public toggle() {
+        if (this.isParsed) {
+            if (this.bullet === null) {
+                this.convert();
+            } else if (this.bullet) {
+                this.bullet = false;
+            } else {
+                this.bullet = true;
+            }
         }
     }
 }

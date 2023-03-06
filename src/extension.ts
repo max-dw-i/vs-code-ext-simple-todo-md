@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import * as commands from './commands';
-import { decorate } from './decorations';
+import { decorate } from './editor';
 import * as settings from './settings';
 
 

@@ -38,7 +38,7 @@
 
         "todo-item-mark": {
             "name": "keyword.other.done.todo-md",
-            "match": "^\\s*-\\s\\[(\\s|X|x)?\\]"
+            "match": "\\[(\\s|X|x)?\\]"
         },
 
         "todo-item-priority": {
