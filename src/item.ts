@@ -2,23 +2,12 @@ import * as vscode from 'vscode';
 import { decorate } from './decorations';
 import * as editor from './editor';
 import * as settings from './settings';
+import { TodoItemPriority, TodoItem } from './types';
 
 
 const TODO_ITEM_BULLET = '[ ]';
 const TODO_ITEM_BULLET_DONE_1 = '[X]';
 const TODO_ITEM_BULLET_DONE_2 = '[x]';
-
-interface TodoItem {
-    prefix: string | null,
-    bullet: boolean | null,
-    priority: string | null,
-    endDate: string | null,
-    startDate: string | null,
-    description: string | null,
-    projects: string[],
-    contexts: string[],
-    dueDate: string | null,
-}
 
 const mdListRe = new RegExp('(\\d+\\.|-|\\*|\\+)\\s+');
 const todoItemBulletRe = new RegExp('\\[(x|X|\\s)\\]');
@@ -47,7 +36,7 @@ export function strToTodoItem(str: string) {
     const item: TodoItem = {
         prefix: parsedGroups.prefix,
         bullet: null,
-        priority: parsedGroups.priority?.trimEnd()?.slice(1, -1),
+        priority: parsedGroups.priority?.trimEnd()?.slice(1, -1) as TodoItemPriority,
         endDate: parsedGroups.endDate?.trimEnd()?.slice(2),
         startDate: parsedGroups.startDate?.trimEnd()?.slice(2),
         description: parsedGroups.description?.trimEnd(),
@@ -107,6 +96,12 @@ export function convertToTodoItem(line: vscode.TextLine) {
     const item = strToTodoItem(line.text);
     if (item && item.bullet === null) {
         item.bullet = false;
+
+        const defaultPriority = settings.defaultPriority();
+        if (defaultPriority !== 'off') {
+            item.priority = defaultPriority;
+        }
+
         editor.replaceLine(line, todoItemToStr(item));
     }
 }

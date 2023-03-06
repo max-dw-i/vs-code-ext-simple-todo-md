@@ -52,6 +52,12 @@
           "type": "boolean",
           "default": true,
           "description": "Renders additional decorations in the editor (for example, sets the 'line-through' style for 'Done' items)"
+        },
+        "todo-md.defaultPriority": {
+          "type": "string",
+          "enum": ["off", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"],
+          "default": "Z",
+          "description": "Adds a priority when converts a line to a TODO item"
         }
       }
     }
