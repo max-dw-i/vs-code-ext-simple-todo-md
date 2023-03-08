@@ -166,6 +166,12 @@ export class TodoItem implements TodoItemI {
         }
     }
 
+    public addEndDate() {
+        if (this.isParsed) {
+            this.endDate = this.currentDate();
+        }
+    }
+
     public convert() {
         if (this.isParsed && this.bullet === null) {
             this.bullet = false;
@@ -187,8 +193,10 @@ export class TodoItem implements TodoItemI {
                 this.convert();
             } else if (this.bullet) {
                 this.bullet = false;
+                this.endDate = null;
             } else {
                 this.bullet = true;
+                this.addEndDate();
             }
         }
     }

@@ -21,3 +21,8 @@ export function isAutoStartDate() {
     const configuration = vscode.workspace.getConfiguration();
     return configuration.get('todo-md.autoStartDate') as boolean;
 }
+
+export function isAutoEndDate() {
+    const configuration = vscode.workspace.getConfiguration();
+    return configuration.get('todo-md.autoEndDate') as boolean;
+}

@@ -106,7 +106,12 @@
         "todo-md.autoStartDate": {
           "type": "boolean",
           "default": true,
-          "description": "Adds the TODO item creation date"
+          "description": "Adds the start date automatically when a TODO item is created"
+        },
+        "todo-md.autoEndDate": {
+          "type": "boolean",
+          "default": true,
+          "description": "Adds the end date automatically when a TODO item is marked as done"
         }
       }
     }
