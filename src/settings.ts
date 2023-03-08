@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TodoItemPriorityT } from './types';
+import { TodoItemPriorityT, DateFormatT } from './types';
 
 
 export function isDecorateTodoItems() {
@@ -10,4 +10,14 @@ export function isDecorateTodoItems() {
 export function defaultPriority() {
     const configuration = vscode.workspace.getConfiguration();
     return configuration.get('todo-md.defaultPriority') as TodoItemPriorityT | "off";
+}
+
+export function dateFormat() {
+    const configuration = vscode.workspace.getConfiguration();
+    return configuration.get('todo-md.dateFormat') as DateFormatT;
+}
+
+export function isAutoStartDate() {
+    const configuration = vscode.workspace.getConfiguration();
+    return configuration.get('todo-md.autoStartDate') as boolean;
 }

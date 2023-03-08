@@ -119,6 +119,53 @@ export class TodoItem implements TodoItemI {
         return `${prefix}${bullet}${priority}${endDate}${startDate}${this.description}`;
     }
 
+    private currentDate() {
+        const curDate = new Date().toISOString();
+        const year = curDate.slice(0, 4);
+        const month = curDate.slice(5, 7);
+        const day = curDate.slice(8, 10);
+        let formattedDate;
+        switch (settings.dateFormat()) {
+            case "dd-mm-yyyy":
+                formattedDate = `${day}-${month}-${year}`;
+                break;
+            case "mm-dd-yyyy":
+                formattedDate = `${month}-${day}-${year}`;
+                break;
+            case "yyyy-mm-dd":
+                formattedDate = `${year}-${month}-${day}`;
+                break;
+            case "dd.mm.yyyy":
+                formattedDate = `${day}.${month}.${year}`;
+                break;
+            case "mm.dd.yyyy":
+                formattedDate = `${month}.${day}.${year}`;
+                break;
+            case "yyyy.mm.dd":
+                formattedDate = `${year}.${month}.${day}`;
+                break;
+            case "dd/mm/yyyy":
+                formattedDate = `${day}/${month}/${year}`;
+                break;
+            case "mm/dd/yyyy":
+                formattedDate = `${month}/${day}/${year}`;
+                break;
+            case "yyyy/mm/dd":
+                formattedDate = `${year}/${month}/${day}`;
+                break;
+            default:
+                formattedDate = `${day}-${month}-${year}`;
+                break;
+        }
+        return formattedDate;
+    }
+
+    public addStartDate() {
+        if (this.isParsed) {
+            this.startDate = this.currentDate();
+        }
+    }
+
     public convert() {
         if (this.isParsed && this.bullet === null) {
             this.bullet = false;
@@ -126,6 +173,10 @@ export class TodoItem implements TodoItemI {
             const defaultPriority = settings.defaultPriority();
             if (defaultPriority !== 'off') {
                 this.priority = defaultPriority;
+            }
+
+            if (settings.isAutoStartDate()) {
+                this.addStartDate();
             }
         }
     }
@@ -141,4 +192,5 @@ export class TodoItem implements TodoItemI {
             }
         }
     }
+
 }

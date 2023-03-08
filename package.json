@@ -55,9 +55,58 @@
         },
         "todo-md.defaultPriority": {
           "type": "string",
-          "enum": ["off", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"],
+          "enum": [
+            "off",
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L",
+            "M",
+            "N",
+            "O",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "U",
+            "V",
+            "W",
+            "X",
+            "Y",
+            "Z"
+          ],
           "default": "Z",
           "description": "Adds a priority when converts a line to a TODO item"
+        },
+        "todo-md.dateFormat": {
+          "type": "string",
+          "enum": [
+            "dd-mm-yyyy",
+            "mm-dd-yyyy",
+            "yyyy-mm-dd",
+            "dd.mm.yyyy",
+            "mm.dd.yyyy",
+            "yyyy.mm.dd",
+            "dd/mm/yyyy",
+            "mm/dd/yyyy",
+            "yyyy/mm/dd"
+          ],
+          "default": "dd-mm-yyyy",
+          "description": "Date format"
+        },
+        "todo-md.autoStartDate": {
+          "type": "boolean",
+          "default": true,
+          "description": "Adds the TODO item creation date"
         }
       }
     }
