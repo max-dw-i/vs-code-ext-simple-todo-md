@@ -2,6 +2,8 @@ import * as vscode from 'vscode';
 import { TodoItem } from './item';
 
 
+const LINE_SEPARATOR = '\n';
+
 const linethroughDecorationType = vscode.window.createTextEditorDecorationType({
     textDecoration: 'line-through',
     color: new vscode.ThemeColor('disabledForeground')
@@ -72,4 +74,40 @@ export function toggleTodoItem() {
         item.toggle();
         replaceLine(curLine, item.toString());
     }
+}
+
+function sort(compareFn: ((a: TodoItem, b: TodoItem) => number)) {
+    const { curEditor, curDoc } = getCurrentEditorAndDocument();
+    if (curEditor && curDoc) {
+        let range: vscode.Range;
+        const curSelection = curEditor.selection;
+        if (curSelection.start.character === curSelection.end.character
+            && curSelection.start.line === curSelection.end.line) {
+            const firstLine = curDoc.lineAt(0);
+            const lastLine = curDoc.lineAt(curDoc.lineCount - 1);
+            range = new vscode.Range(firstLine.range.start, lastLine.range.end);
+        } else {
+            const curSelectionStartPos = new vscode.Position(curSelection.start.line, 0);
+            const curSelectionEndPos = new vscode.Position(
+                curSelection.end.line,
+                curDoc.lineAt(curSelection.end.line).range.end.character
+            );
+            range = new vscode.Range(curSelectionStartPos, curSelectionEndPos);
+        }
+
+        const text = curDoc.getText(range);
+        const items = text.split(LINE_SEPARATOR).filter(l => l).map(l => new TodoItem(l));
+        const sortedItems = items.sort(compareFn);
+        const sortedText = sortedItems.join(LINE_SEPARATOR);
+
+        curEditor.edit(editBuilder => {
+            editBuilder.replace(range, sortedText);
+        });
+    }
+}
+
+export function sortByPriority() {
+    sort((a: TodoItem, b: TodoItem) => {
+        return a.priority.localeCompare(b.priority);
+    });
 }

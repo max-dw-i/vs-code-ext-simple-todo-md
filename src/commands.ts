@@ -15,4 +15,10 @@ export function register(context: vscode.ExtensionContext) {
         editor.toggleTodoItem
     );
     context.subscriptions.push(disposable);
+
+    disposable = vscode.commands.registerCommand(
+        'todo-md.sortByPriority',
+        editor.sortByPriority
+    );
+    context.subscriptions.push(disposable);
 }

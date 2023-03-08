@@ -24,29 +24,29 @@ const todoItemRe = new RegExp(
 
 
 export class TodoItem implements TodoItemI {
-    prefix: string | null;
+    prefix: string;
     bullet: boolean | null;
-    priority: TodoItemPriorityT | null;
-    endDate: string | null;
-    startDate: string | null;
-    description: string | null;
+    priority: TodoItemPriorityT;
+    endDate: string;
+    startDate: string;
+    description: string;
     projects: string[];
     contexts: string[];
-    dueDate: string | null;
+    dueDate: string;
 
     private line: string;
     private isParsed: boolean;
 
     constructor(line: string) {
-        this.prefix = null;
+        this.prefix = '';
         this.bullet = null;
-        this.priority = null;
-        this.endDate = null;
-        this.startDate = null;
-        this.description = null;
+        this.priority = '';
+        this.endDate = '';
+        this.startDate = '';
+        this.description = '';
         this.projects = [];
         this.contexts = [];
-        this.dueDate = null;
+        this.dueDate = '';
 
         this.line = line;
         this.isParsed = false;
@@ -64,11 +64,21 @@ export class TodoItem implements TodoItemI {
     }
 
     private populateProperties(groups: { [key: string]: string; }) {
-        this.prefix = groups.prefix;
-        this.priority = groups.priority?.trimEnd()?.slice(1, -1) as TodoItemPriorityT;
-        this.endDate = groups.end?.trimEnd()?.slice(2);
-        this.startDate = groups.start?.trimEnd()?.slice(2);
-        this.description = groups.description?.trimEnd();
+        if (groups.prefix) {
+            this.prefix = groups.prefix;
+        }
+        if (groups.priority) {
+            this.priority = groups.priority.trimEnd().slice(1, -1) as TodoItemPriorityT;
+        }
+        if (groups.end) {
+            this.endDate = groups.end.trimEnd().slice(2);
+        }
+        if (groups.start) {
+            this.startDate = groups.start.trimEnd().slice(2);
+        }
+        if (groups.description) {
+            this.description = groups.description.trimEnd();
+        }
 
         const bullet = groups.bullet?.trimEnd();
         if (bullet) {
@@ -101,8 +111,6 @@ export class TodoItem implements TodoItemI {
             return this.line;
         }
 
-        const prefix = this.prefix ?? '';
-
         let bullet;
         if (this.bullet === null) {
             bullet = '';
@@ -112,11 +120,11 @@ export class TodoItem implements TodoItemI {
             bullet = `${TODO_ITEM_BULLET} `;
         }
 
-        const priority = !this.priority ? '' : `(${this.priority}) `;
-        const endDate = !this.endDate ? '' : `e:${this.endDate} `;
-        const startDate = !this.startDate ? '' : `s:${this.startDate} `;
+        const priority = this.priority ? `(${this.priority}) ` : '';
+        const endDate = this.endDate ? `e:${this.endDate} ` : '';
+        const startDate = this.startDate ? `s:${this.startDate} ` : '';
 
-        return `${prefix}${bullet}${priority}${endDate}${startDate}${this.description}`;
+        return `${this.prefix}${bullet}${priority}${endDate}${startDate}${this.description}`;
     }
 
     private currentDate() {
@@ -126,31 +134,31 @@ export class TodoItem implements TodoItemI {
         const day = curDate.slice(8, 10);
         let formattedDate;
         switch (settings.dateFormat()) {
-            case "dd-mm-yyyy":
+            case 'dd-mm-yyyy':
                 formattedDate = `${day}-${month}-${year}`;
                 break;
-            case "mm-dd-yyyy":
+            case 'mm-dd-yyyy':
                 formattedDate = `${month}-${day}-${year}`;
                 break;
-            case "yyyy-mm-dd":
+            case 'yyyy-mm-dd':
                 formattedDate = `${year}-${month}-${day}`;
                 break;
-            case "dd.mm.yyyy":
+            case 'dd.mm.yyyy':
                 formattedDate = `${day}.${month}.${year}`;
                 break;
-            case "mm.dd.yyyy":
+            case 'mm.dd.yyyy':
                 formattedDate = `${month}.${day}.${year}`;
                 break;
-            case "yyyy.mm.dd":
+            case 'yyyy.mm.dd':
                 formattedDate = `${year}.${month}.${day}`;
                 break;
-            case "dd/mm/yyyy":
+            case 'dd/mm/yyyy':
                 formattedDate = `${day}/${month}/${year}`;
                 break;
-            case "mm/dd/yyyy":
+            case 'mm/dd/yyyy':
                 formattedDate = `${month}/${day}/${year}`;
                 break;
-            case "yyyy/mm/dd":
+            case 'yyyy/mm/dd':
                 formattedDate = `${year}/${month}/${day}`;
                 break;
             default:
@@ -193,7 +201,7 @@ export class TodoItem implements TodoItemI {
                 this.convert();
             } else if (this.bullet) {
                 this.bullet = false;
-                this.endDate = null;
+                this.endDate = '';
             } else {
                 this.bullet = true;
                 this.addEndDate();
