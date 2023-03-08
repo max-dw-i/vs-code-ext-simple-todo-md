@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import { TodoItem } from './item';
-import * as settings from './settings';
 
 
 const linethroughDecorationType = vscode.window.createTextEditorDecorationType({
@@ -9,39 +8,39 @@ const linethroughDecorationType = vscode.window.createTextEditorDecorationType({
 });
 
 
-function getCurrentEditorAndDocument() {
+export function getCurrentEditorAndDocument() {
     const editor = vscode.window.activeTextEditor;
     return {
-        editor: editor,
-        doc: editor?.document
+        curEditor: editor,
+        curDoc: editor?.document
     };
 }
 
 function currentLine() {
-    const { editor, doc } = getCurrentEditorAndDocument();
-    if (editor && doc) {
-        const curPos = editor.selection.active;
-        return doc.lineAt(curPos.line);
+    const { curEditor, curDoc } = getCurrentEditorAndDocument();
+    if (curEditor && curDoc) {
+        const curPos = curEditor.selection.active;
+        return curDoc.lineAt(curPos.line);
     }
 }
 
 function replaceLine(line: vscode.TextLine, replaceWith: string) {
-    const { editor } = getCurrentEditorAndDocument();
-    if (editor) {
+    const { curEditor } = getCurrentEditorAndDocument();
+    if (curEditor) {
         const lineRange = line.range;
         const lineSelection = new vscode.Selection(lineRange.start, lineRange.end);
-        return editor.edit(editBuilder => {
+        return curEditor.edit(editBuilder => {
             editBuilder.replace(lineSelection, replaceWith);
         });
     }
 }
 
 export function decorate() {
-    const { editor, doc } = getCurrentEditorAndDocument();
-    if (editor && doc) {
+    const { curEditor, curDoc } = getCurrentEditorAndDocument();
+    if (curEditor && curDoc) {
         const decorationRanges = [];
-        for (let i = 0; i < doc.lineCount; i++) {
-            const line = doc.lineAt(i);
+        for (let i = 0; i < curDoc.lineCount; i++) {
+            const line = curDoc.lineAt(i);
             const todoItem = new TodoItem(line.text);
             if (todoItem.bullet === true) {
                 const startPos = new vscode.Position(
@@ -53,7 +52,7 @@ export function decorate() {
                 decorationRanges.push(range);
             }
         }
-        editor.setDecorations(linethroughDecorationType, decorationRanges);
+        curEditor.setDecorations(linethroughDecorationType, decorationRanges);
     }
 }
 
@@ -71,10 +70,6 @@ export function toggleTodoItem() {
     if (curLine) {
         const item = new TodoItem(curLine.text);
         item.toggle();
-
-        const promise = replaceLine(curLine, item.toString());
-        if (promise && settings.isDecorateTodoItems()) {
-            promise.then(() => { decorate(); });
-        }
+        replaceLine(curLine, item.toString());
     }
 }

@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as editor from './editor';
 
 
-export function registerCommands(context: vscode.ExtensionContext) {
+export function register(context: vscode.ExtensionContext) {
     let disposable;
     disposable = vscode.commands.registerCommand(
         'todo-md.convertToTodoItem',
