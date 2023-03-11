@@ -9,11 +9,7 @@ const TODO_ITEM_BULLET_DONE_2 = '[x]';
 const mdListRe = new RegExp('(\\d+\\.|-|\\*|\\+)\\s+');
 const todoItemBulletRe = new RegExp('\\[(x|X|\\s)\\]');
 const todoItemPriorityRe = new RegExp('\\([A-Z]\\)');
-const dateSepRe = new RegExp('(-|/|.)');
-const dateRe = new RegExp(
-    `(\\d{2}${dateSepRe.source}\\d{2}${dateSepRe.source}\\d{4}`
-    + `|\\d{4}${dateSepRe.source}\\d{2}${dateSepRe.source}\\d{2})`
-);
+const dateRe = new RegExp(`(\\d{2}-\\d{2}-\\d{4}|\\d{4}-\\d{2}-\\d{2})`);
 const startDateRe = new RegExp(`s:${dateRe.source}`);
 const endDateRe = new RegExp(`e:${dateRe.source}`);
 const todoItemRe = new RegExp(
@@ -142,24 +138,6 @@ export class TodoItem implements TodoItemI {
                 break;
             case 'yyyy-mm-dd':
                 formattedDate = `${year}-${month}-${day}`;
-                break;
-            case 'dd.mm.yyyy':
-                formattedDate = `${day}.${month}.${year}`;
-                break;
-            case 'mm.dd.yyyy':
-                formattedDate = `${month}.${day}.${year}`;
-                break;
-            case 'yyyy.mm.dd':
-                formattedDate = `${year}.${month}.${day}`;
-                break;
-            case 'dd/mm/yyyy':
-                formattedDate = `${day}/${month}/${year}`;
-                break;
-            case 'mm/dd/yyyy':
-                formattedDate = `${month}/${day}/${year}`;
-                break;
-            case 'yyyy/mm/dd':
-                formattedDate = `${year}/${month}/${day}`;
                 break;
             default:
                 formattedDate = `${day}-${month}-${year}`;

@@ -2,8 +2,7 @@ export type TodoItemPriorityT = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 
     | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z'
     | '';
 
-export type DateFormatT = 'dd-mm-yyyy' | 'mm-dd-yyyy' | 'yyyy-mm-dd' | 'dd.mm.yyyy' |
-    'mm.dd.yyyy' | 'yyyy.mm.dd' | 'dd/mm/yyyy' | 'mm/dd/yyyy' | 'yyyy/mm/dd';
+export type DateFormatT = 'dd-mm-yyyy' | 'mm-dd-yyyy' | 'yyyy-mm-dd';
 
 export interface TodoItemI {
     prefix: string,

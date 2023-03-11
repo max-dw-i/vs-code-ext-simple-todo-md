@@ -92,13 +92,7 @@
           "enum": [
             "dd-mm-yyyy",
             "mm-dd-yyyy",
-            "yyyy-mm-dd",
-            "dd.mm.yyyy",
-            "mm.dd.yyyy",
-            "yyyy.mm.dd",
-            "dd/mm/yyyy",
-            "mm/dd/yyyy",
-            "yyyy/mm/dd"
+            "yyyy-mm-dd"
           ],
           "default": "dd-mm-yyyy",
           "description": "Date format"
