@@ -22,7 +22,7 @@ const todoItemRe = new RegExp(
 export class TodoItem implements TodoItemI {
     prefix: string;
     bullet: boolean | null;
-    priority: TodoItemPriorityT;
+    priority: TodoItemPriorityT | '';
     endDate: string;
     startDate: string;
     description: string;
