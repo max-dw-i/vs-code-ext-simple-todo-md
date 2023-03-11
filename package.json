@@ -36,6 +36,11 @@
         "command": "todo-md.sortByPriority",
         "title": "Sort TODO items by priority",
         "category": "todo.md"
+      },
+      {
+        "command": "todo-md.sortByDueDate",
+        "title": "Sort TODO items by due date",
+        "category": "todo.md"
       }
     ],
     "keybindings": [

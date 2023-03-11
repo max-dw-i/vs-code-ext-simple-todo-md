@@ -111,8 +111,20 @@ function sort(compareFn: ((a: TodoItem, b: TodoItem) => number)) {
 export function sortByPriority() {
     sort((a: TodoItem, b: TodoItem) => {
         // Add 'ZZ' to put items without priority at the end after sorting
-        const priorityA = a.priority ?? 'ZZ';
-        const priorityB = b.priority ?? 'ZZ';
+        const lowestPriority = 'ZZ';
+        const priorityA = a.priority ?? lowestPriority;
+        const priorityB = b.priority ?? lowestPriority;
         return priorityA.localeCompare(priorityB);
+    });
+}
+
+export function sortByDueDate() {
+    sort((a: TodoItem, b: TodoItem) => {
+        // Use the min date to put items without date at the end after sorting
+        const lowestDate = new Date(-8640000000000000);
+        const dateA = a.dueDate?.date() ?? lowestDate;
+        const dateB = b.dueDate?.date() ?? lowestDate;
+        // @ts-ignore
+        return dateB - dateA;
     });
 }

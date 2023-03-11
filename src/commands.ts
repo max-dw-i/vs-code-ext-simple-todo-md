@@ -21,4 +21,10 @@ export function register(context: vscode.ExtensionContext) {
         editor.sortByPriority
     );
     context.subscriptions.push(disposable);
+
+    disposable = vscode.commands.registerCommand(
+        'todo-md.sortByDueDate',
+        editor.sortByDueDate
+    );
+    context.subscriptions.push(disposable);
 }
