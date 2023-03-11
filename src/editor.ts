@@ -110,8 +110,9 @@ function sort(compareFn: ((a: TodoItem, b: TodoItem) => number)) {
 
 export function sortByPriority() {
     sort((a: TodoItem, b: TodoItem) => {
-        const priorityA = a.priority ?? '';
-        const priorityB = b.priority ?? '';
+        // Add 'ZZ' to put items without priority at the end after sorting
+        const priorityA = a.priority ?? 'ZZ';
+        const priorityB = b.priority ?? 'ZZ';
         return priorityA.localeCompare(priorityB);
     });
 }
