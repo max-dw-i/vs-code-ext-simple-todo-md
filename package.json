@@ -1,6 +1,6 @@
 {
-  "name": "todo-md",
-  "displayName": "todo.md",
+  "name": "simple-todo-md",
+  "displayName": "simple-todo-md",
   "description": "Manages TODO lists written in Markdown",
   "version": "0.0.1",
   "engines": {
@@ -18,34 +18,34 @@
       {
         "language": "markdown",
         "scopeName": "source.markdown",
-        "path": "./syntaxes/todo-md.tmLanguage.json"
+        "path": "./syntaxes/simple-todo-md.tmLanguage.json"
       }
     ],
     "commands": [
       {
-        "command": "todo-md.convertToTodoItem",
+        "command": "simple-todo-md.convertToTodoItem",
         "title": "Convert line to TODO item",
-        "category": "todo.md"
+        "category": "simple-todo-md"
       },
       {
-        "command": "todo-md.toggleTodoItem",
+        "command": "simple-todo-md.toggleTodoItem",
         "title": "Mark TODO item as done/not done",
-        "category": "todo.md"
+        "category": "simple-todo-md"
       },
       {
-        "command": "todo-md.sortByPriority",
+        "command": "simple-todo-md.sortByPriority",
         "title": "Sort TODO items by priority",
-        "category": "todo.md"
+        "category": "simple-todo-md"
       },
       {
-        "command": "todo-md.sortByDueDate",
+        "command": "simple-todo-md.sortByDueDate",
         "title": "Sort TODO items by due date",
-        "category": "todo.md"
+        "category": "simple-todo-md"
       }
     ],
     "keybindings": [
       {
-        "command": "todo-md.toggleTodoItem",
+        "command": "simple-todo-md.toggleTodoItem",
         "key": "ctrl+alt+x",
         "when": "editorTextFocus && editorLangId == markdown"
       }
@@ -53,12 +53,12 @@
     "configuration": {
       "title": "Settings",
       "properties": {
-        "todo-md.decorateTodoItems": {
+        "simple-todo-md.decorateTodoItems": {
           "type": "boolean",
           "default": true,
           "description": "Renders additional decorations in the editor (for example, sets the 'line-through' style for 'Done' items)"
         },
-        "todo-md.defaultPriority": {
+        "simple-todo-md.defaultPriority": {
           "type": "string",
           "enum": [
             "off",
@@ -92,7 +92,7 @@
           "default": "Z",
           "description": "Adds a priority when converts a line to a TODO item"
         },
-        "todo-md.dateFormat": {
+        "simple-todo-md.dateFormat": {
           "type": "string",
           "enum": [
             "dd-mm-yyyy",
@@ -102,12 +102,12 @@
           "default": "dd-mm-yyyy",
           "description": "Date format"
         },
-        "todo-md.autoStartDate": {
+        "simple-todo-md.autoStartDate": {
           "type": "boolean",
           "default": true,
           "description": "Adds the start date automatically when a TODO item is created"
         },
-        "todo-md.autoEndDate": {
+        "simple-todo-md.autoEndDate": {
           "type": "boolean",
           "default": true,
           "description": "Adds the end date automatically when a TODO item is marked as done"

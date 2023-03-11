@@ -1,4 +1,4 @@
-# todo.md
+# simple-todo-md
 
 Extension manages TODO lists written in Markdown.
 

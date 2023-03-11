@@ -35,39 +35,32 @@
                 }
             ]
         },
-
         "todo-item-mark": {
-            "name": "keyword.other.done.todo-md",
+            "name": "keyword.other.done.simple-todo-md",
             "match": "\\[(\\s|X|x)?\\]"
         },
-
         "todo-item-priority": {
-            "name": "support.constant.priority.todo-md",
+            "name": "support.constant.priority.simple-todo-md",
             "match": "\\([A-Z]\\)"
         },
-
         "todo-item-enddate": {
-            "name": "constant.language.date.end.todo-md",
+            "name": "constant.language.date.end.simple-todo-md",
             "match": "e:\\d{2}-\\d{2}-\\d{4}"
         },
-
         "todo-item-startdate": {
-            "name": "constant.language.date.start.todo-md",
+            "name": "constant.language.date.start.simple-todo-md",
             "match": "s:\\d{2}-\\d{2}-\\d{4}"
         },
-
         "todo-item-project": {
-            "name": "entity.name.section.project.todo-md",
+            "name": "entity.name.section.project.simple-todo-md",
             "match": "\\+\\S+"
         },
-
         "todo-item-context": {
-            "name": "entity.name.section.context.todo-md",
+            "name": "entity.name.section.context.simple-todo-md",
             "match": "\\@\\S+"
         },
-
         "todo-item-duedate": {
-            "name": "variable.parameter.date.due.todo-md",
+            "name": "variable.parameter.date.due.simple-todo-md",
             "match": "d:\\d{2}-\\d{2}-\\d{4}"
         }
     }
