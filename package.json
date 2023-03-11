@@ -3,6 +3,9 @@
   "displayName": "simple-todo-md",
   "description": "Manages TODO lists written in Markdown",
   "version": "0.0.1",
+  "repository": {
+    "url": "https://github.com/max-dw-i/vs-code-ext-simple-todo-md"
+  },
   "engines": {
     "vscode": "^1.75.0"
   },
