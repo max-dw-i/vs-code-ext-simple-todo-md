@@ -9,7 +9,11 @@ export function isDecorateTodoItems() {
 
 export function defaultPriority() {
     const configuration = vscode.workspace.getConfiguration();
-    return configuration.get('todo-md.defaultPriority') as TodoItemPriorityT | "off";
+    const priority = configuration.get('todo-md.defaultPriority') as TodoItemPriorityT | "off";
+    if (priority === 'off') {
+        return null;
+    }
+    return priority;
 }
 
 export function dateFormat() {

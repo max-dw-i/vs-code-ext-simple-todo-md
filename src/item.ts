@@ -1,3 +1,4 @@
+import { FormattedDate, currentFormattedDate, strToFormattedDate } from './date';
 import * as settings from './settings';
 import { TodoItemPriorityT, TodoItemI } from './types';
 
@@ -22,13 +23,13 @@ const todoItemRe = new RegExp(
 export class TodoItem implements TodoItemI {
     prefix: string;
     bullet: boolean | null;
-    priority: TodoItemPriorityT | '';
-    endDate: string;
-    startDate: string;
+    priority: TodoItemPriorityT | null;
+    endDate: FormattedDate | null;
+    startDate: FormattedDate | null;
     description: string;
     projects: string[];
     contexts: string[];
-    dueDate: string;
+    dueDate: FormattedDate | null;
 
     private line: string;
     private isParsed: boolean;
@@ -36,13 +37,13 @@ export class TodoItem implements TodoItemI {
     constructor(line: string) {
         this.prefix = '';
         this.bullet = null;
-        this.priority = '';
-        this.endDate = '';
-        this.startDate = '';
+        this.priority = null;
+        this.endDate = null;
+        this.startDate = null;
         this.description = '';
         this.projects = [];
         this.contexts = [];
-        this.dueDate = '';
+        this.dueDate = null;
 
         this.line = line;
         this.isParsed = false;
@@ -63,15 +64,19 @@ export class TodoItem implements TodoItemI {
         if (groups.prefix) {
             this.prefix = groups.prefix;
         }
+
         if (groups.priority) {
             this.priority = groups.priority.trimEnd().slice(1, -1) as TodoItemPriorityT;
         }
+
         if (groups.end) {
-            this.endDate = groups.end.trimEnd().slice(2);
+            this.endDate = strToFormattedDate(groups.end.trimEnd().slice(2));
         }
+
         if (groups.start) {
-            this.startDate = groups.start.trimEnd().slice(2);
+            this.startDate = strToFormattedDate(groups.start.trimEnd().slice(2));
         }
+
         if (groups.description) {
             this.description = groups.description.trimEnd();
         }
@@ -97,7 +102,7 @@ export class TodoItem implements TodoItemI {
                 this.contexts.push(word.slice(1));
             }
             if (word.startsWith('d:')) {
-                this.dueDate = word.slice(2);
+                this.dueDate = strToFormattedDate(word.slice(2));
             }
         }
     }
@@ -123,38 +128,15 @@ export class TodoItem implements TodoItemI {
         return `${this.prefix}${bullet}${priority}${endDate}${startDate}${this.description}`;
     }
 
-    private currentDate() {
-        const curDate = new Date().toISOString();
-        const year = curDate.slice(0, 4);
-        const month = curDate.slice(5, 7);
-        const day = curDate.slice(8, 10);
-        let formattedDate;
-        switch (settings.dateFormat()) {
-            case 'dd-mm-yyyy':
-                formattedDate = `${day}-${month}-${year}`;
-                break;
-            case 'mm-dd-yyyy':
-                formattedDate = `${month}-${day}-${year}`;
-                break;
-            case 'yyyy-mm-dd':
-                formattedDate = `${year}-${month}-${day}`;
-                break;
-            default:
-                formattedDate = `${day}-${month}-${year}`;
-                break;
-        }
-        return formattedDate;
-    }
-
     public addStartDate() {
         if (this.isParsed) {
-            this.startDate = this.currentDate();
+            this.startDate = currentFormattedDate();
         }
     }
 
     public addEndDate() {
         if (this.isParsed) {
-            this.endDate = this.currentDate();
+            this.endDate = currentFormattedDate();
         }
     }
 
@@ -163,7 +145,7 @@ export class TodoItem implements TodoItemI {
             this.bullet = false;
 
             const defaultPriority = settings.defaultPriority();
-            if (defaultPriority !== 'off') {
+            if (defaultPriority) {
                 this.priority = defaultPriority;
             }
 
@@ -179,7 +161,7 @@ export class TodoItem implements TodoItemI {
                 this.convert();
             } else if (this.bullet) {
                 this.bullet = false;
-                this.endDate = '';
+                this.endDate = null;
             } else {
                 this.bullet = true;
                 this.addEndDate();
