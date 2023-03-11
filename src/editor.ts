@@ -10,14 +10,6 @@ const linethroughDecorationType = vscode.window.createTextEditorDecorationType({
 });
 
 
-export function getCurrentEditorAndDocument() {
-    const editor = vscode.window.activeTextEditor;
-    return {
-        curEditor: editor,
-        curDoc: editor?.document
-    };
-}
-
 function currentLine() {
     const { curEditor, curDoc } = getCurrentEditorAndDocument();
     if (curEditor && curDoc) {
@@ -36,6 +28,16 @@ function replaceLine(line: vscode.TextLine, replaceWith: string) {
         });
     }
 }
+
+
+export function getCurrentEditorAndDocument() {
+    const editor = vscode.window.activeTextEditor;
+    return {
+        curEditor: editor,
+        curDoc: editor?.document
+    };
+}
+
 
 export function decorate() {
     const { curEditor, curDoc } = getCurrentEditorAndDocument();
